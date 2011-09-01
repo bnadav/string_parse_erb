@@ -13,9 +13,9 @@ module StrParseErb
   end # ClassMethods
 
   module InstanceMethods
-   def string_parse_erb(template, vars_hash)
+   def string_parse_erb(template, vars_hash, safe_level=3)
      data = OpenStruct.new(vars_hash)
-     ERB.new(template).result(data.send(:binding))
+     ERB.new(template, safe_level).result(data.send(:binding))
    end
   end # InstanceMethods
 

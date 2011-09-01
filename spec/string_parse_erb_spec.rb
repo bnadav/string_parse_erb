@@ -11,4 +11,9 @@ describe "StringParseErb" do
     vars_hash = {:part_of_day => "morning"}
     string_parse_erb(str, vars_hash).should == "Good morning"
   end
+
+  it "blocks unsecure operations" do
+    str = " 1 + 1 = <%= eval(\"1 + 1 \") %>"
+    lambda { string_parse_erb(str, {}) }.should raise_error
+  end
 end
