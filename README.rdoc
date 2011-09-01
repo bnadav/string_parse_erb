@@ -1,9 +1,21 @@
 = string_parse_erb
 
-Description goes here.
+Say you design a CMS, and you want the ability to replace some place-holders inside an item-content with some external values.
+Of course you can do it using regular expressions and freinds.
+But why not use the powerful ERB engine instead ?
+Implenting ERB fragments inside your content can open up wide array of possibilities, since all of the sudden
+you can use the power of ruby inside you content - not just variables-replacement but also conditionals, loops and so on...
+The downside of this is security...
+
+1.You wouldn't want to process an item-content with something like:
+
+  "The time now is <%= time %>. Say bye bye... <% system('shutdown -r now') %>"
+
+2.You would like to limit the 'binding' object passed to ERB, so it includes only the variables you wish to expose.
+
 
 == Contributing to string_parse_erb
- 
+
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
 * Fork the project
