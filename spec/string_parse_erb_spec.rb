@@ -17,13 +17,24 @@ describe "StringParseErb" do
     string_parse_erb(str, vars_hash).should == "Good morning, the time is six o'clock."
   end
 
-  it "blocks insecure operations by default ($SAFE level 3)" do
-    str = " 1 + 1 = <%= eval(\"1 + 1 \") %>"
-    lambda { string_parse_erb(str, {}) }.should raise_error
+  it "replaces erb fragments with values from vars_hash, when string is tainted" do
+    str = "Good <%= part_of_day %>, the time is <%= time %>."
+    vars_hash = {:part_of_day => "morning", :time => "six o'clock"}
+    string_parse_erb(str.taint, vars_hash).should == "Good morning, the time is six o'clock."
   end
 
-  it "blocks another insecure operations by default ($SAFE level 3)" do
-    lambda { string_parse_erb("<%= abort %>", {}) }.should raise_error
+  it "blocks insecure operations by default" do
+    str = "<%= eval(\"system('ls')\") %>"
+    lambda { string_parse_erb(str, {}) }.should raise_error(SecurityError)
+  end
+
+  it "blocks another insecure operations by default" do
+    lambda { string_parse_erb("<%= abort %>", {}) }.should raise_error(SecurityError)
+  end
+
+  it "blocks insecure operations by default, when string is tainted" do
+    str = "<%= eval(\"system('ls')\") %>"
+    lambda { string_parse_erb(str.taint, {}) }.should raise_error(SecurityError)
   end
 
   it "allows changing SAFE level" do
@@ -31,30 +42,14 @@ describe "StringParseErb" do
     string_parse_erb(str, {}, 0).should == " 1 + 1 = 2"
   end
 
-  it "Untaints string by default in order to process external strings" do
-    str = "Good <%= part_of_day %>"
-    vars_hash = {:part_of_day => "morning"}
-    str.taint
-    string_parse_erb(str, vars_hash).should == "Good morning"
-  end
-
-  it "Does not untaint if requested" do
-    str = "Good <%= part_of_day %>"
-    vars_hash = {:part_of_day => "morning"}
-    str.taint
-    lambda { string_parse_erb(str, vars_hash, 1, false) }.should raise_error
-  end
-
-  it "process tainted at SAFE level 0" do
-    str = "Good <%= part_of_day %>"
-    vars_hash = {:part_of_day => "morning"}
-    str.taint
-    string_parse_erb(str, vars_hash, 0, false).should == "Good morning"
-  end
-
   it "does not bind external variables" do
     str = "Good <%= part_of_day %>"
     @part_of_day = part_of_day = @@part_of_day = "morning"
     string_parse_erb(str, {}).should == "Good "
+  end
+
+  it "processes complex fragments" do
+    str = "Hello<% if planet %> planet <% else %> earth <% end %>"
+    string_parse_erb(str, {:planet => false}).should == "Hello earth "
   end
 end
