@@ -7,9 +7,9 @@ describe "StringParseErb" do
   end
 
   it "replaces erb fragments with values from vars_hash" do
-    str = "Good <%= part_of_day %>"
-    vars_hash = {:part_of_day => "morning"}
-    string_parse_erb(str, vars_hash).should == "Good morning"
+    str = "Good <%= part_of_day %>, the time is <%= time %>."
+    vars_hash = {:part_of_day => "morning", :time => "six o'clock"}
+    string_parse_erb(str, vars_hash).should == "Good morning, the time is six o'clock."
   end
 
   it "blocks unsecure operations by default ($SAFE level 3)" do
