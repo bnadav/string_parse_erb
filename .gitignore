@@ -13,6 +13,7 @@ doc
 
 # Vim backup files
 .swp
+.*.swp
 
 # jeweler generated
 pkg
