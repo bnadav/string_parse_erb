@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "string_parse_erb"
   gem.homepage = "http://github.com/bnadav/string_parse_erb"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Process ERB fragments in a String, according to variables hash}
+  gem.description = %Q{Process ERB fragments in a String, according to variables hash, no extenal vars are visible to ERB, safe level and untainting of string can be set}
   gem.email = "nadav.blum@gmail.com"
   gem.authors = ["Nadav Blum"]
   # dependencies defined in Gemfile
