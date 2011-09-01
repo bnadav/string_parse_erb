@@ -29,4 +29,17 @@ describe "StringParseErb" do
     string_parse_erb(str, vars_hash).should == "Good morning"
   end
 
+  it "Does not untaint if requested" do
+    str = "Good <%= part_of_day %>"
+    vars_hash = {:part_of_day => "morning"}
+    str.taint
+    lambda { string_parse_erb(str, vars_hash, 1, false) }.should raise_error
+  end
+
+  it "Tainted string are processed at SAFE level 0" do
+    str = "Good <%= part_of_day %>"
+    vars_hash = {:part_of_day => "morning"}
+    str.taint
+    string_parse_erb(str, vars_hash, 0, false).should == "Good morning"
+  end
 end
