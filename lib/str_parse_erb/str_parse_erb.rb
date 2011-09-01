@@ -14,8 +14,10 @@ module StrParseErb
 
   module InstanceMethods
    def string_parse_erb(template, vars_hash)
-     template
+     data = OpenStruct.new(vars_hash)
+     ERB.new(template).result(data.send(:binding))
    end
   end # InstanceMethods
+
 
 end
