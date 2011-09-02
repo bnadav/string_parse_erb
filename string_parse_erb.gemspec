@@ -29,7 +29,8 @@ Gem::Specification.new do |s|
     "lib/str_parse_erb/str_parse_erb.rb",
     "lib/string_parse_erb.rb",
     "spec/spec_helper.rb",
-    "spec/string_parse_erb_spec.rb"
+    "spec/string_parse_erb_spec.rb",
+    "string_parse_erb.gemspec"
   ]
   s.homepage = %q{http://github.com/bnadav/string_parse_erb}
   s.licenses = ["MIT"]
