@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{string_parse_erb}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Nadav Blum"]
-  s.date = %q{2011-09-02}
+  s.date = %q{2011-09-03}
   s.description = %q{Process ERB fragments in a String, according to variables hash, no extenal vars are visible to ERB, safe level and untainting of string can be set}
   s.email = %q{nadav.blum@gmail.com}
   s.extra_rdoc_files = [
