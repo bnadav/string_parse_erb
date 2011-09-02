@@ -40,10 +40,7 @@ The solution taken by this gem is very simple, (and so may not be perfect), and 
    )
    # =>  "Good morning, the time is six o'clock."
 
-   string_parse_erb(
-             "<%= cmd %>",
-             {:cmd=> "abort"}
-   )
+   string_parse_erb( "<%= abort %>", {})
    # => Raises SecurityError Exception
 
 == Copyright
