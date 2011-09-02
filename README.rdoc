@@ -1,28 +1,50 @@
 = string_parse_erb
 
 Say you design a CMS, and you want the ability to replace some place-holders inside an item-content with some external values.
-Of course you can do it using regular expressions and freinds.
-But why not use the powerful ERB engine instead ?
-Implenting ERB fragments inside your content can open up wide array of possibilities, since all of the sudden
-you can use the power of ruby inside you content - not just variables-replacement but also conditionals, loops and so on...
+
+Of course, you can use regular expressions and friends to do the task.
+
+But why not use the power of ERB engine instead ?
+
+Implementing ERB fragments inside your content can open up wide array of possibilities,
+all of the sudden you get the power of ruby inside you content: not just variables-replacement but conditionals, loops and so on..
+
 The downside of this is security...
 
-1.You wouldn't want to process an item-content with something like:
+* You wouldn't want to process an item-content with something like:
 
-  "The time now is <%= time %>. Say bye bye... <% system('shutdown -r now') %>"
+  <tt>"The time now is <%= time %>. Say bye bye... <% system('shutdown -r now') %>"</tt>
 
-2.You would like to limit the 'binding' object passed to ERB, so it includes only the variables you wish to expose.
+  While 'time' may be a legal variable to be used inside the item-content template, calling #system
+  should definitely be forbidden.
 
+* You would like to limit the 'binding' object passed to ERB, so it includes only the variables you wish to expose, and not any variable happen to be in the program's context.
 
-== Contributing to string_parse_erb
+The solution taken by this gem is very simple, (and so may not be perfect), and discussed in a couple of posts like: http://stackoverflow.com/questions/3619516/how-do-you-mark-a-ruby-binding-as-trusted
 
-* Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
-* Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
-* Fork the project
-* Start a feature/bugfix branch
-* Commit and push until you are happy with your contribution
-* Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
+== Installation
+*  gem install string_parse_erb
+
+*  include of extend StrParseErb module
+
+*  string_parse_erb(template, var_hash, safe_level=4)
+   Where:
+   *  template - a string containing erb fragments
+   *  var_hash - A hash of variables and their values to be exposed for template usage
+   *  safe_level(defaults to 4) - ruby SAFE level, under which ERB will operate
+
+== Examples
+  string_parse_erb(
+             "Good <%= part_of_day %>, the time is <%= time %>.",
+             {:part_of_day => "morning", :time => "six o'clock"}
+   )
+   # =>  "Good morning, the time is six o'clock."
+
+   string_parse_erb(
+             "<%= cmd %>",
+             {:cmd=> "abort"}
+   )
+   # => Raises SecurityError Exception
 
 == Copyright
 
